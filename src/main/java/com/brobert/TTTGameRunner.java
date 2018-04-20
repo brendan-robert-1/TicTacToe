@@ -36,7 +36,7 @@ public class TTTGameRunner {
 	 */
 	private void start(Args args) {
 		game = new Game(args);
-		player = new BruteForceMiniMaxComputerPlayer(game.getComputer());
+		player = new RandomComputerPlayer(game.getComputer());
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Starting Game...");
 		System.out.println("Human is [" + game.getHuman() + "]");
