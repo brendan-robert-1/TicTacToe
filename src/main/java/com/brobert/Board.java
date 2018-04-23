@@ -7,7 +7,7 @@ package com.brobert;
  * @author brobert
  *
  */
-public class BoardState {
+public class Board {
 
 	enum Token {
 		X, O, EMPTY
@@ -25,7 +25,7 @@ public class BoardState {
 
 
 
-	public BoardState(int width) {
+	public Board(int width) {
 		if (width < 3) {
 			throw new IllegalArgumentException("width of playign board must be greater than 2");
 		} else {
@@ -102,8 +102,8 @@ public class BoardState {
 	 * @param boardState
 	 * @return
 	 */
-	public static BoardState copyOf(BoardState boardState) {
-		BoardState copy = new BoardState(boardState.width);
+	public static Board copyOf(Board boardState) {
+		Board copy = new Board(boardState.width);
 		for (int i = 0; i < boardState.width; i++) {
 			for (int j = 0; j < boardState.width; j++) {
 				copy.squares[i][j] = boardState.squares[i][j];
@@ -132,7 +132,7 @@ public class BoardState {
 	public boolean isFull() {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < width; j++) {
-				if (squares[j][i] == Token.EMPTY) {
+				if (squares[i][j] == Token.EMPTY) {
 					return false;
 				}
 			}
@@ -174,8 +174,9 @@ public class BoardState {
 	private boolean up(Token square) {
 		boolean upWin = true;
 		int x = 0, y = width - 1;
-		for (int i = width - 1; i > 0; i--) {
-			if (at(x, y) != square) {
+		for (int i = width; i > 0; i--) {
+			Token whatsThere = at(x, y);
+			if (whatsThere != square) {
 				upWin = false;
 				break;
 			}
@@ -230,14 +231,14 @@ public class BoardState {
 	 */
 	private boolean horizontalCheck(Token square) {
 		for (int i = 0; i < width; i++) {
-			boolean verticalWin = true;
+			boolean hoirzontal = true;
 			for (int j = 0; j < width; j++) {
 				if (at(i, j) != square) {
-					verticalWin = false;
+					hoirzontal = false;
 					break;
 				}
 			}
-			if (verticalWin) {
+			if (hoirzontal) {
 				return true;
 			}
 		}

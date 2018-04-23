@@ -3,7 +3,7 @@
  */
 package com.brobert;
 
-import com.brobert.BoardState.Token;
+import com.brobert.Board.Token;
 
 /**
  * @author brobert
@@ -11,7 +11,7 @@ import com.brobert.BoardState.Token;
  */
 public class Game {
 
-	private BoardState boardState;
+	private Board boardState;
 
 	private Token human, computer;
 
@@ -20,7 +20,7 @@ public class Game {
 
 
 	public Game(Args args) {
-		boardState = new BoardState(args.getWidth());
+		boardState = new Board(args.getWidth());
 		human(args.getHuman());
 	}
 
@@ -33,8 +33,8 @@ public class Game {
 
 
 
-	public BoardState getBoardState() {
-		return BoardState.copyOf(boardState);
+	public Board getBoardState() {
+		return Board.copyOf(boardState);
 	}
 
 
@@ -97,11 +97,13 @@ public class Game {
 	public boolean isOver() {
 		if (boardState.enoughInARow(computer)) {
 			System.out.println("Computer Won!");
+			boolean humanWon = boardState.enoughInARow(computer);
 			System.exit(0);
 			return true;
 		}
 		if (boardState.enoughInARow(human)) {
 			System.out.println("Human Won!");
+			boolean humanWon = boardState.enoughInARow(human);
 			System.exit(0);
 			return true;
 		}

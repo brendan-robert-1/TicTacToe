@@ -7,7 +7,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.beust.jcommander.JCommander;
-import com.brobert.BoardState.Token;
+import com.brobert.Board.Token;
 
 /**
  * @author brobert
@@ -36,7 +36,7 @@ public class TTTGameRunner {
 	 */
 	private void start(Args args) {
 		game = new Game(args);
-		player = new RandomComputerPlayer(game.getComputer());
+		player = new BruteForceMiniMaxComputerPlayer(game.getComputer());
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Starting Game...");
 		System.out.println("Human is [" + game.getHuman() + "]");

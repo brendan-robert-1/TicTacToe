@@ -9,5 +9,5 @@ package com.brobert;
  */
 public interface ComputerPlayer {
 
-	Coordinate play(BoardState boardState);
+	Coordinate play(Board boardState);
 }

@@ -6,7 +6,7 @@ package com.brobert;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.brobert.BoardState.Token;
+import com.brobert.Board.Token;
 
 /**
  * @author brobert
@@ -34,7 +34,7 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 
 
 	@Override
-	public Coordinate play(BoardState boardState) {
+	public Coordinate play(Board boardState) {
 		List<Coordinate> legalMoves = legalMoves(boardState);
 		Move bestMove = minimax(boardState, AIType, 0);
 		return bestMove.coord;
@@ -43,44 +43,44 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 
 
 	/**
-	 * @param boardState
+	 * @param board
 	 * @return
 	 */
-	private Move minimax(BoardState boardState, Token playerType, int depth) {
+	private Move minimax(Board board, Token playerType, int depth) {
 		Move bestMove = new Move();
 		int bestScore = (playerType == AIType) ? -1 : 1;
 		Move currentMove;
-		Coordinate bestCoordinate = new Coordinate(-1, -1);
-		List<Coordinate> legalMoves = legalMoves(boardState);
-		if (boardState.enoughInARow(opposite(AIType)) || boardState.enoughInARow(AIType) || boardState.isFull()) {
-			bestScore = evaluate(boardState, playerType);
+		List<Coordinate> legalMoves = legalMoves(board);
+
+		//game over or board is full
+		if (board.enoughInARow(opposite(AIType)) || board.enoughInARow(AIType) || legalMoves.isEmpty()) {
+			bestMove.score = evaluate(board);
+			depth = 0;
 		} else {
 			for (Coordinate c : legalMoves) {
 				//Make this move
-				boardState.placePiece(playerType, c.x, c.y);
-				/*if (depth == 0 && playerType == AIType && (c.x == 0 && c.y == 0)) {
-					System.out.println("starting on not the first block");
-				}*/
+				board.placePiece(playerType, c.x, c.y);
+
 				//Computer maximizing
 				if (playerType == AIType) {
-					currentMove = minimax(boardState, opposite(AIType), depth + 1);
+					currentMove = minimax(board, opposite(AIType), depth + 1);
 					if (currentMove.score > bestScore) {
 						bestScore = currentMove.score;
 						bestMove.coord = c;
-						bestMove = currentMove;
+						bestMove.score = bestScore;
 					}
 
 					//Human minimizing
 				} else {
-					currentMove = minimax(boardState, AIType, depth + 1);
+					currentMove = minimax(board, AIType, depth + 1);
 					if (currentMove.score < bestScore) {
 						bestScore = currentMove.score;
 						bestMove.coord = c;
-						bestMove = currentMove;
+						bestMove.score = bestScore;
 					}
 				}
 				//undo move
-				boardState.placePiece(Token.EMPTY, c.x, c.y);
+				board.placePiece(Token.EMPTY, c.x, c.y);
 			}
 		}
 		return bestMove;
@@ -91,19 +91,13 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 	/**
 	 * @return
 	 */
-	private int evaluate(BoardState boardState, Token playerType) {
+	private int evaluate(Board board) {
 		int score = 0;
-		if (playerType != AIType && (boardState.enoughInARow(playerType) || boardState.enoughInARow(opposite(playerType)))) {
-			System.out.println("evaluating " + playerType + " someone won.");
-			System.out.println(playerType + " won: " + boardState.enoughInARow(playerType) + " " + opposite(playerType) + " won: "
-					+ boardState.enoughInARow(opposite(playerType)));
+		if (board.enoughInARow(AIType)) {
+			score = 1;
 		}
-		if (boardState.enoughInARow(playerType)) {
-			score = (playerType == AIType) ? 1 : -1;
-
-		}
-		if (boardState.enoughInARow(opposite(playerType))) {
-			score = (playerType == AIType) ? -1 : 1;
+		if (board.enoughInARow(opposite(AIType))) {
+			score = -1;
 		}
 		return score;
 	}
@@ -120,7 +114,7 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 
 
 
-	private List<Coordinate> legalMoves(BoardState boardState) {
+	private List<Coordinate> legalMoves(Board boardState) {
 		List<Coordinate> legalMoves = new ArrayList<>();
 		for (int i = 0; i < boardState.getWidth(); i++) {
 			for (int j = 0; j < boardState.getWidth(); j++) {
