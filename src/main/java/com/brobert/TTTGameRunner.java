@@ -41,11 +41,25 @@ public class TTTGameRunner {
 		System.out.println("Starting Game...");
 		System.out.println("Human is [" + game.getHuman() + "]");
 		System.out.println("Computer is [" + game.getComputer() + "]");
+
+		System.out.println();
+		game.getBoardState().printBoard();
+		System.out.println();
+
 		while (!game.isOver()) {
-			computerTurn();
-			if (!game.isOver()) {
+			if (args.getFirst().equalsIgnoreCase("human")) {
+
 				playerTurn(scanner);
+				if (!game.isOver()) {
+					computerTurn();
+				}
+			} else if (args.getFirst().equalsIgnoreCase("computer")) {
+				computerTurn();
+				if (!game.isOver()) {
+					playerTurn(scanner);
+				}
 			}
+
 		}
 	}
 
@@ -77,7 +91,7 @@ public class TTTGameRunner {
 			System.out.println("Enter Y: ");
 			y = getInt(scanner);
 		}
-		Coordinate play = new Coordinate(x, y);
+		Coordinate play = new Coordinate(x - 1, y - 1);
 		game.placePiece(game.getHuman(), play);
 		game.printTurn(game.getHuman(), play);
 	}
@@ -91,7 +105,7 @@ public class TTTGameRunner {
 			try {
 				entry = scanner.nextInt();
 				isValid = true;
-				if (entry > (game.getBoardState().getWidth() - 1)) {
+				if (entry > (game.getBoardState().getWidth()) || entry < 1) {
 					isValid = false;
 					System.out.println("Integer is out of bounds of the width of the board: " + game.getBoardState().getWidth());
 				}
@@ -113,7 +127,7 @@ public class TTTGameRunner {
 	 * @return
 	 */
 	private boolean isValidCoordinate(int x, int y) {
-		return game.getBoardState().at(x, y) == Token.EMPTY;
+		return game.getBoardState().at(x - 1, y - 1) == Token.EMPTY;
 	}
 
 }

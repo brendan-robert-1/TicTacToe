@@ -20,7 +20,7 @@ public class Game {
 
 
 	public Game(Args args) {
-		boardState = new Board(args.getWidth());
+		boardState = Board.fromConfig(args.getStartingBoard());
 		human(args.getHuman());
 	}
 
@@ -41,7 +41,7 @@ public class Game {
 
 	public void printTurn(Token square, Coordinate coordinate) {
 		System.out.println("\n" + getPlayerBySquare(square) + "'s turn. Turn #" + turns);
-		System.out.println(getPlayerBySquare(square) + " placed " + square + " at " + coordinate.toString());
+		System.out.println(getPlayerBySquare(square) + " placed " + square + " at " + coordinate.huamnFriendlyString());
 		boardState.printBoard();
 		System.out.print("\n\n");
 	}

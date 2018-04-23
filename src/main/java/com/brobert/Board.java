@@ -41,6 +41,13 @@ public class Board {
 
 
 
+	/**
+	 *
+	 */
+	private Board() {}
+
+
+
 	public void printBoard() {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < width; j++) {
@@ -243,5 +250,35 @@ public class Board {
 			}
 		}
 		return false;
+	}
+
+
+
+	/**
+	 * @param startingBoard
+	 * @return
+	 */
+	public static Board fromConfig(String startingBoard) {
+		Board board = new Board();
+		board.squares = new Token[3][3];
+		board.width = 3;
+		int x = 0, y = 0;
+		for (char c : startingBoard.toCharArray()) {
+			if (c == '-') {
+				board.placePiece(Token.EMPTY, x, y);
+			} else if (c == 'X' || c == 'x') {
+				board.placePiece(Token.X, x, y);
+			} else if (c == 'o' || c == 'O') {
+				board.placePiece(Token.O, x, y);
+			} else {
+				throw new IllegalArgumentException(startingBoard + " is not a valid starting board string. only '-xo' are valid entries.");
+			}
+			x++;
+			if (x == 3) {
+				y++;
+				x = 0;
+			}
+		}
+		return board;
 	}
 }

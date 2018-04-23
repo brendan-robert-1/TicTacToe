@@ -29,6 +29,13 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 	class Move {
 		Coordinate coord;
 		int score;
+
+
+
+		@Override
+		public String toString() {
+			return coord.toString() + " score [" + score + "]";
+		}
 	}
 
 
@@ -49,6 +56,7 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 	private Move minimax(Board board, Token playerType, int depth) {
 		Move bestMove = new Move();
 		int bestScore = (playerType == AIType) ? -1 : 1;
+		bestMove.score = bestScore;
 		Move currentMove;
 		List<Coordinate> legalMoves = legalMoves(board);
 
@@ -57,6 +65,9 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 			bestMove.score = evaluate(board);
 			depth = 0;
 		} else {
+			//in the even that all moves are equal and none are optimal just choose the first
+			bestMove.coord = legalMoves.get(0);
+			//For each legal move that we can make find the best possible move -1 for minimizing and 1 for maximizing
 			for (Coordinate c : legalMoves) {
 				//Make this move
 				board.placePiece(playerType, c.x, c.y);
@@ -68,6 +79,7 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 						bestScore = currentMove.score;
 						bestMove.coord = c;
 						bestMove.score = bestScore;
+
 					}
 
 					//Human minimizing

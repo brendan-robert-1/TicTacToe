@@ -28,4 +28,10 @@ public class Coordinate {
 	public String toString() {
 		return x + "," + y;
 	}
+
+
+
+	public String huamnFriendlyString() {
+		return (x + 1) + "," + (y + 1);
+	}
 }

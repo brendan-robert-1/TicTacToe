@@ -18,10 +18,32 @@ public class Args {
 	@Parameter(names = { "-w", "--width" }, required = false)
 	private int width = 3;
 
+	@Parameter(names = { "-s" }, required = false)
+	private String startingBoard = "---------";
+
+	@Parameter(names = { "-f", "--first" }, required = false)
+	private String first = "computer";
+
+
+
+	public String getFirst() {
+		if (!(first.equalsIgnoreCase("computer") || first.equalsIgnoreCase("human"))) {
+			System.out.println("-f and --first must have either computer or human passed in as an argument for who should go first.");
+			System.exit(1);
+		}
+		return first;
+	}
+
 
 
 	public Token getHuman() {
 		return human;
+	}
+
+
+
+	public String getStartingBoard() {
+		return startingBoard;
 	}
 
 
