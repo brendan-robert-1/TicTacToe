@@ -52,10 +52,10 @@ public class TicTacToeGame extends Game {
 
 				playerTurn(scanner);
 				if (!isOver()) {
-					computerTurn(player);
+					computerTurn(player, getComputer());
 				}
 			} else if (first.equalsIgnoreCase("computer")) {
-				computerTurn(player);
+				computerTurn(player, getComputer());
 				if (!isOver()) {
 					playerTurn(scanner);
 				}

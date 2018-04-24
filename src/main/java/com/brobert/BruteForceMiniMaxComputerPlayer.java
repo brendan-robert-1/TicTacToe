@@ -41,7 +41,6 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 
 	@Override
 	public Coordinate play(TwoDimensionalBoard boardState) {
-		List<Coordinate> legalMoves = legalMoves(boardState);
 		Move bestMove = minimaxAlphaBeta(boardState, AIType, 0, -1, 1);
 		System.out.println("minimax total calls: " + minimaxCalls);
 		return bestMove.coord;
