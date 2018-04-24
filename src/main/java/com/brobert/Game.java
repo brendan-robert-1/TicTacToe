@@ -20,7 +20,7 @@ public class Game {
 
 
 	public Game(Args args) {
-		boardState = Board.fromConfig(args.getStartingBoard());
+		boardState = new Board(args.getWidth());
 		human(args.getHuman());
 	}
 

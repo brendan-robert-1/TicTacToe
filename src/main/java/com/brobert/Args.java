@@ -18,9 +18,6 @@ public class Args {
 	@Parameter(names = { "-w", "--width" }, required = false)
 	private int width = 3;
 
-	@Parameter(names = { "-s" }, required = false)
-	private String startingBoard = "---------";
-
 	@Parameter(names = { "-f", "--first" }, required = false)
 	private String first = "computer";
 
@@ -38,12 +35,6 @@ public class Args {
 
 	public Token getHuman() {
 		return human;
-	}
-
-
-
-	public String getStartingBoard() {
-		return startingBoard;
 	}
 
 

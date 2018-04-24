@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.brobert;
 
 import java.util.ArrayList;
@@ -38,14 +35,74 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 		}
 	}
 
+	int minimaxCalls = 0;
+
 
 
 	@Override
 	public Coordinate play(Board boardState) {
 		List<Coordinate> legalMoves = legalMoves(boardState);
-		Move bestMove = minimax(boardState, AIType, 0);
+		Move bestMove = minimaxAlphaBeta(boardState, AIType, 0, -1, 1);
+		System.out.println("minimax total calls: " + minimaxCalls);
 		return bestMove.coord;
 	}
+
+	/*
+
+		*//**
+			 * Keeping this commented out mainly for reference as a non-alpha
+			 * beta pruned version of minimax.
+			 *
+			 * @param board
+			 * @return
+			 *//*
+				private Move minimax(Board board, Token playerType, int depth) {
+				minimaxCalls++;
+				Move bestMove = new Move();
+				int bestScore = (playerType == AIType) ? -1 : 1;
+				bestMove.score = bestScore;
+				Move currentMove;
+				List<Coordinate> legalMoves = legalMoves(board);
+
+				//game over or board is full
+				if (board.enoughInARow(opposite(AIType)) || board.enoughInARow(AIType) || legalMoves.isEmpty()) {
+					bestMove.score = evaluate(board);
+					depth = 0;
+				} else {
+					//in the even that all moves are equal and none are optimal just choose the first
+					bestMove.coord = legalMoves.get(0);
+					//For each legal move that we can make find the best possible move -1 for minimizing and 1 for maximizing
+					for (Coordinate c : legalMoves) {
+						//Make this move
+						board.placePiece(playerType, c.x, c.y);
+
+						//Computer maximizing
+						if (playerType == AIType) {
+							currentMove = minimax(board, opposite(AIType), depth + 1);
+							if (currentMove.score > bestScore) {
+								bestScore = currentMove.score;
+								bestMove.coord = c;
+								bestMove.score = bestScore;
+
+							}
+
+							//Human minimizing
+						} else {
+							currentMove = minimax(board, AIType, depth + 1);
+							if (currentMove.score < bestScore) {
+								bestScore = currentMove.score;
+								bestMove.coord = c;
+								bestMove.score = bestScore;
+							}
+						}
+						//undo move
+						board.placePiece(Token.EMPTY, c.x, c.y);
+					}
+				}
+				return bestMove;
+				}
+
+				*/
 
 
 
@@ -53,7 +110,8 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 	 * @param board
 	 * @return
 	 */
-	private Move minimax(Board board, Token playerType, int depth) {
+	private Move minimaxAlphaBeta(Board board, Token playerType, int depth, int alpha, int beta) {
+		minimaxCalls++;
 		Move bestMove = new Move();
 		int bestScore = (playerType == AIType) ? -1 : 1;
 		bestMove.score = bestScore;
@@ -74,18 +132,19 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 
 				//Computer maximizing
 				if (playerType == AIType) {
-					currentMove = minimax(board, opposite(AIType), depth + 1);
-					if (currentMove.score > bestScore) {
+					currentMove = minimaxAlphaBeta(board, opposite(AIType), depth + 1, alpha, beta);
+					if (currentMove.score > alpha) {
+						alpha = currentMove.score;
 						bestScore = currentMove.score;
 						bestMove.coord = c;
 						bestMove.score = bestScore;
-
 					}
 
 					//Human minimizing
 				} else {
-					currentMove = minimax(board, AIType, depth + 1);
-					if (currentMove.score < bestScore) {
+					currentMove = minimaxAlphaBeta(board, AIType, depth + 1, alpha, beta);
+					if (currentMove.score < beta) {
+						beta = currentMove.score;
 						bestScore = currentMove.score;
 						bestMove.coord = c;
 						bestMove.score = bestScore;
@@ -93,6 +152,10 @@ public class BruteForceMiniMaxComputerPlayer implements ComputerPlayer {
 				}
 				//undo move
 				board.placePiece(Token.EMPTY, c.x, c.y);
+
+				if (alpha >= beta) {
+					break;
+				}
 			}
 		}
 		return bestMove;
