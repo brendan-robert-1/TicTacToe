@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.brobert.Board.Token;
+import com.brobert.TwoDimensionalBoard.Token;
 
 /**
  * @author brobert
@@ -26,7 +26,7 @@ public class RandomComputerPlayer implements ComputerPlayer {
 
 
 	@Override
-	public Coordinate play(Board boardState) {
+	public Coordinate play(TwoDimensionalBoard boardState) {
 		List<Coordinate> validPlaces = getValidCoordinates(boardState);
 		int randomNum = ThreadLocalRandom.current().nextInt(0, validPlaces.size());
 		return validPlaces.get(randomNum);
@@ -39,10 +39,10 @@ public class RandomComputerPlayer implements ComputerPlayer {
 	 * @param boardState
 	 * @return
 	 */
-	private List<Coordinate> getValidCoordinates(Board boardState) {
+	private List<Coordinate> getValidCoordinates(TwoDimensionalBoard boardState) {
 		List<Coordinate> validCoords = new ArrayList<>();
-		for (int i = 0; i < boardState.getWidth(); i++) {
-			for (int j = 0; j < boardState.getWidth(); j++) {
+		for (int i = 0; i < boardState.width(); i++) {
+			for (int j = 0; j < boardState.width(); j++) {
 				if (boardState.at(j, i) == Token.EMPTY) {
 					validCoords.add(new Coordinate(j, i));
 				}

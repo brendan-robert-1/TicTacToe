@@ -4,7 +4,7 @@
 package com.brobert;
 
 import com.beust.jcommander.Parameter;
-import com.brobert.Board.Token;
+import com.brobert.TwoDimensionalBoard.Token;
 
 /**
  * @author brobert
